@@ -8,7 +8,7 @@ var app = express();
 
 var PORT = process.env.PORT || 8080;
 
-app.use(express.static("app/public"));
+app.use(express.static("public"));
 
 var databaseUrl = "apScraper";
 var collections = ["articles"];
@@ -111,6 +111,15 @@ app.get("/scrape", function(req, res) {
 
     res.redirect("/");
   });
+});
+
+app.get("/clear", function(req, res) {
+  db.articles.drop();
+  res.redirect("/");
+});
+
+app.get("/save", function(req, res) {
+  console.log(this);
 });
 
 app.listen(PORT, function() {

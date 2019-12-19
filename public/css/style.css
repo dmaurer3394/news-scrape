@@ -1,0 +1,34 @@
+body {
+  background-color: rgb(240, 240, 240) !important;
+}
+
+.jumbotron {
+  background-image: url(../images/jumbotron-background.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.navbar {
+  margin-top: -32px;
+  margin-bottom: 38px;
+}
+
+.ap-logo {
+  margin-left: 15px;
+  width: 125px;
+  height: auto;
+  border-radius: 5%;
+}
+
+.nav-link {
+  float: left;
+}
+
+.title-link {
+  color: black;
+  text-decoration: none;
+}
+
+.title-link:hover {
+  text-decoration: none;
+}
