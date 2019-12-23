@@ -19,18 +19,14 @@ db.on("error", function(error) {
   console.log("Database Error:", error);
 });
 
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
 app.get("/", function(req, res) {
-  db.articles.find({}, function(error, found) {
-    if (error) {
-      console.log(error);
-    } else {
-      res.render("index", { articles: found });
-    }
-  });
-  // res.render("index", { quotes: data });
+  res.redirect("/scrape");
 });
 
 app.get("/scrape", function(req, res) {
@@ -60,7 +56,6 @@ app.get("/scrape", function(req, res) {
         .children(".post-header")
         .children(".post-meta")
         .children(".post-author")
-        // .children("a")
         .text();
 
       var timeStamp = $(element)
@@ -68,8 +63,6 @@ app.get("/scrape", function(req, res) {
         .children(".post-meta")
         .children(".post-date-time")
         .children("time")
-        // .next()
-        // .children("time")
         .text()
         .slice(10, 18)
         .trim();
@@ -84,7 +77,8 @@ app.get("/scrape", function(req, res) {
         link: link,
         author: author,
         timeStamp: timeStamp,
-        snippet: snippet
+        snippet: snippet,
+        saved: false
       };
 
       newArray.push(itemObject);
@@ -96,30 +90,74 @@ app.get("/scrape", function(req, res) {
             link: link,
             author: author,
             timeStamp: timeStamp,
-            snippet: snippet
+            snippet: snippet,
+            saved: false
           },
           function(err, inserted) {
             if (err) {
               console.log(err);
-            } else {
-              console.log(inserted);
             }
           }
         );
       }
     });
 
-    res.redirect("/");
+    res.redirect("/find");
+  });
+});
+
+app.get("/find", function(req, res) {
+  db.articles.find({}, function(error, found) {
+    if (error) {
+      console.log(error);
+    } else {
+      res.render("index", { articles: found });
+    }
   });
 });
 
 app.get("/clear", function(req, res) {
   db.articles.drop();
-  res.redirect("/");
+  res.redirect("/find");
 });
 
-app.get("/save", function(req, res) {
-  console.log(this);
+app.get("/saved", function(req, res) {
+  db.articles.find({ saved: true }, function(error, found) {
+    if (error) {
+      console.log(error);
+    } else {
+      res.render("saved", { articles: found });
+    }
+  });
+});
+
+app.post("/api/saved", function(req, res) {
+  var title = req.body.title;
+
+  db.articles.findAndModify(
+    {
+      query: { title: title },
+      update: { $set: { saved: true } }
+    },
+    function(err, doc, lastErrorObject) {
+      console.log("article saved");
+    }
+  );
+});
+
+app.post("/api/delete", function(req, res) {
+  var title = req.body.title;
+  // res.redirect("/saved");
+
+  db.articles.findAndModify(
+    {
+      query: { title: title },
+      update: { $set: { saved: false } }
+    },
+    function(err, doc, lastErrorObject) {
+      console.log("article deleted");
+    }
+  );
 });
 
 app.listen(PORT, function() {

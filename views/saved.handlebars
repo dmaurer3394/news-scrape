@@ -22,14 +22,14 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
-                <li class="nav-item active">
+                <li class="nav-item">
                     <a class="nav-link" href="/">
-                        <h3 class="font-weight-light">Home </h3><span class="sr-only">(current)</span>
+                        <h3 class="font-weight-light">Home </h3>
                     </a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item active">
                     <a class="nav-link" href="/saved">
-                        <h3 class="font-weight-light">Saved articles</h3>
+                        <h3 class="font-weight-light">Saved articles</h3><span class="sr-only">(current)</span>
                     </a>
                 </li>
             </ul>
@@ -61,7 +61,7 @@
                 </footer>
             </blockquote>
             <br>
-            <a class="btn btn-outline-dark btn-lg btn-block save-button" id="{{@index}}" role="button">Save</a>
+            <a class="btn btn-outline-danger btn-lg btn-block delete-button" id="{{@index}}" role="button">Delete</a>
         </div>
     </div>
     <br>
@@ -70,7 +70,7 @@
     <div class="card">
         <div class="card-body">
             <h4 class="card-title">I'm not seeing any articles</h4>
-            <h6>Try scraping for new ones</h6>
+            <h6>Try saving one from the home page</h6>
         </div>
     </div>
     {{/if}}
